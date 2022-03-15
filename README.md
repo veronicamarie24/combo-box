@@ -9,3 +9,4 @@ Prerequisites include `Node.js` and `npm`. Go to the [Node.js homepage](https://
 2. In the base directory, run `npm start`
 
 ## Notes
+The list will auto-close when the user interacts with something else.
