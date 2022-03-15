@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './ComboBox.css';
+import arrow from './arrow-down.png';
 
 const ComboBox = (props) => {
     const fruits = props.fruits;
@@ -25,8 +26,15 @@ const ComboBox = (props) => {
         setListOpen(!listOpen);
     }
 
+    function handleItemClick(item) {
+        setListOpen(false);
+        // Filter out the emoji from the fruit
+        const fruitSelected = item.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '');
+        document.getElementById('fruit-input').value = fruitSelected;
+    }
+
     return (
-        <div className='combo-box-container'>
+        <div className={`combo-box-container ${listOpen ? 'list-open' : 'list-closed'}`}>
             <form>
                 <input 
                     type='text' 
@@ -35,11 +43,16 @@ const ComboBox = (props) => {
                     placeholder='Choose a Fruit:'
                     onChange={((e) => handleInputOnchange(e.target.value))}
                 />
-                <button type='button' onClick={handleClickDropdown}>V</button>
+                <button type='button' onClick={handleClickDropdown}>
+                    <img src={arrow} />
+                </button>
                 {listOpen && <div className='fruit-dropdown-list'>
-                    <ul id="fruits-list">
+                    <ul id='fruits-list'>
                         {filteredFruits.map(
-                            (fruit, id) => <li key={id} className="fruit-list-item"><span role='img'>{fruit}</span></li>
+                            (fruit, id) => 
+                                <li key={id} className='fruit-list-item' onClick={((e) => handleItemClick(e.target.innerText))}>
+                                    <span role='img'>{fruit}</span>
+                                </li>
                         )}
                     </ul>
                 </div>}
