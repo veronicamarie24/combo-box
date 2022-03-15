@@ -53,6 +53,10 @@
     padding: 10px;
 }
 
+.fruit-dropdown-list li:last-child {
+    padding-bottom: 0;
+}
+
 .fruit-dropdown-list li:hover {
     background-color: #EEEEEE;
 }

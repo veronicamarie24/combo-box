@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './ComboBox.css';
 import arrow from './arrow-down.png';
 
@@ -7,14 +7,28 @@ const ComboBox = (props) => {
     const [filteredFruits, setFilteredFruits] = useState(props.fruits);
     const [listOpen, setListOpen] = useState(false);
     const [filter, setFilter] = useState('');
+    const containerRef = useRef(null);
 
     useEffect(() => {
         filterFruits();
     }, [filter]);
 
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [containerRef]);
+
     function filterFruits() {
         const filteredFruits = fruits.filter(fruit => fruit.toLowerCase().includes(filter.toLowerCase()));
         setFilteredFruits(filteredFruits);
+    }
+
+    function handleClickOutside(event) {
+        if (containerRef.current && !containerRef.current.contains(event.target)) {
+            setListOpen(false);
+        }
     }
 
     function handleInputOnchange(input) {
@@ -34,7 +48,7 @@ const ComboBox = (props) => {
     }
 
     return (
-        <div className={`combo-box-container ${listOpen ? 'list-open' : 'list-closed'}`}>
+        <div className={`combo-box-container ${listOpen ? 'list-open' : 'list-closed'}`} ref={containerRef}>
             <form>
                 <input 
                     type='text' 
