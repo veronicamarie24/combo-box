@@ -1,20 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import './ComboBox.css';
 
-const ComboBox = () => {
+const ComboBox = (props) => {
+    const [listOpen, setListOpen] = useState(false);
+    const [filter, setFilter] = useState('');
+
+    useEffect(() => {
+        
+    }, [filter]);
+
+    const fruitsList = props.fruits.map(
+        (fruit, id) => <li key={id} className="fruit-list-item"><span role='img'>{fruit}</span></li>
+    )
+
+    function handleInputOnchange(input) {
+        if (!listOpen) { setListOpen(true); }
+        setFilter(input);
+    }
+
+    function handleClickDropdown() {
+        setListOpen(!listOpen);
+    }
+
     return (
-        <div className="combo-box-container">
+        <div className='combo-box-container'>
             <form>
-                <input type='text' id='fruit-input' name='fruit-input' defaultValue={'Choose a Fruit:'} />
-                <button type='button'>V</button>
-                <div className=''>
-                    <ul style={{'list-style-type' : 'none'}}>
-                        <li><span role='img' aria-label='apple'>🍎 Apple</span></li>
-                        <li><span role='img' aria-label='banana'>🍌 Banana</span></li>
-                        <li><span role='img' aria-label='blueberry'>🫐 Blueberry</span></li>
-                        <li><span role='img' aria-label='mango'>🥭 Mango</span></li>
+                <input 
+                    type='text' 
+                    id='fruit-input' 
+                    name='fruit-input' 
+                    placeholder='Choose a Fruit:'
+                    onChange={((e) => handleInputOnchange(e.target.value))}
+                />
+                <button type='button' onClick={handleClickDropdown}>V</button>
+                {listOpen && <div className='fruit-dropdown-list'>
+                    <ul>
+                        {fruitsList}
                     </ul>
-                </div>
+                </div>}
             </form>
         </div>
     );
